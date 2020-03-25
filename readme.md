@@ -20,7 +20,7 @@ Navigate to http://localhost:8888
 ## Resources + Support
 
 - [Helix GitHub Repo](https://github.com/Lokeh/helix)
-- [Slack](https://clojurians.net) channel: `#hx`
+- [Slack](https://clojurians.net) channel: `#helix`
 
 *Let [Todo MVC](https://github.com/tastejs/todomvc/issues) if you discover anything worth sharing.*
 
