@@ -9,4 +9,4 @@
         :devtools {:http-root    "."
                    :http-port    8888
                    :preloads     [devtools.preload
-                                  helix.experimental.refresh]}}}}
+                                  todo-mvc.dev]}}}}

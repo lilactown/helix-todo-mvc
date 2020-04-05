@@ -1,12 +1,14 @@
 (ns todo-mvc.core
-  (:require	[clojure.string :as string]
-            [helix.core :as hx :refer [$ <> defnc]]
-            [helix.dom :as d]
-            [helix.hooks :as hooks]
-            [todo-mvc.components :as c]
-            [todo-mvc.utils :as utils]
-            ["react-dom" :as rdom]
-            ["react-router-dom" :as rr]))
+  (:require
+   [clojure.string :as string]
+   [helix.core :as hx :refer [$ <>]]
+   [helix.dom :as d]
+   [helix.hooks :as hooks]
+   [todo-mvc.components :as c]
+   [todo-mvc.lib :refer [defnc]]
+   [todo-mvc.storage :as storage]
+   ["react-dom" :as rdom]
+   ["react-router-dom" :as rr]))
 
 (defn todo [id title]
   {:id id
@@ -33,19 +35,23 @@
 
 (defmethod todo-actions
   ::toggle [todos [_ id]]
-  (into []
-        (map #(if (= (:id %) id)
-                (update % :completed? not)
-                %))
-        todos))
+  (into
+   []
+   (map
+    #(if (= (:id %) id)
+       (update % :completed? not)
+       %))
+   todos))
 
 (defmethod todo-actions
   ::update-title [todos [_ id title]]
-  (into []
-        (map #(if (= (:id %) id)
-                (assoc % :title (string/trim title))
-                %))
-        todos))
+  (into
+   []
+   (map
+    #(if (= (:id %) id)
+       (assoc % :title (string/trim title))
+       %))
+   todos))
 
 (defmethod todo-actions
   ::toggle-all [todos _]
@@ -58,10 +64,11 @@
 
 (defnc App
   []
-  (let [[todos dispatch] (utils/use-persisted-reducer "todos-helix"
-                                                      todo-actions
-                                                      nil
-                                                      #(todo-actions % [::init]))
+  (let [[todos dispatch] (storage/use-persisted-reducer
+                          "todos-helix"
+                          todo-actions
+                          nil
+                          #(todo-actions % [::init]))
         active-todos (filter (comp not :completed?) todos)
         completed-todos (filter :completed? todos)
 

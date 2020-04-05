@@ -1,8 +1,11 @@
 (ns todo-mvc.components
-  (:require [helix.core :as hx :refer [$ <> defnc]]
-            [helix.dom :as d]
-            [helix.hooks :as hooks])
-  (:require-macros [todo-mvc.components]))
+  (:require
+   [helix.core :as hx :refer [$ <>]]
+   [helix.dom :as d]
+   [helix.hooks :as hooks]
+   [todo-mvc.lib :refer [defnc]])
+  (:require-macros
+   [todo-mvc.components]))
 
 (defn enter-key? [ev]
   (= (.-which ev) 13))
@@ -24,14 +27,15 @@
   [{:keys [on-complete]}]
   (let [[new-todo set-new-todo] (hooks/use-state "")
         on-change #(set-new-todo (.. % -target -value))]
-    (d/input {:class "new-todo"
-              :placeholder "What needs to be done?"
-              :autoFocus true
-              :value new-todo
-              :on-key-down #(when (enter-key? %)
-                              (on-complete new-todo)
-                              (set-new-todo ""))
-              :on-change on-change})))
+    (d/input
+     {:class "new-todo"
+      :placeholder "What needs to be done?"
+      :autoFocus true
+      :value new-todo
+      :on-key-down #(when (enter-key? %)
+                      (on-complete new-todo)
+                      (set-new-todo ""))
+      :on-change on-change})))
 
 (defn init-state [title]
   {:editing? false
@@ -74,25 +78,28 @@
      {:class (cond
                editing? "editing"
                completed? "completed")}
-     (d/input {:class "edit"
-               :value title
-               :on-change #(dispatch [::update-title (.. % -target -value)])
-               :ref input-ref
-               :on-key-down #(cond
-                               (and (enter-key? %)
-                                    (= (.. % -target -value) "")) (on-destroy id)
-                               (enter-key? %) (do (on-update-title id title)
-                                                  (dispatch [::stop-editing]))
-                               (escape-key? %) (do (dispatch [::reset initial-title])))
-               :on-blur #(when editing?
-                           (on-update-title id title)
-                           (dispatch [::stop-editing]))})
+     (d/input
+      {:class "edit"
+       :value title
+       :on-change #(dispatch [::update-title (.. % -target -value)])
+       :ref input-ref
+       :on-key-down #(cond
+                       (and (enter-key? %)
+                            (= (.. % -target -value) "")) (on-destroy id)
+                       (enter-key? %) (do (on-update-title id title)
+                                          (dispatch [::stop-editing]))
+                       (escape-key? %) (do (dispatch [::reset initial-title])))
+       :on-blur #(when editing?
+                   (on-update-title id title)
+                   (dispatch [::stop-editing]))})
      (d/div
       {:class "view"}
-      (d/input {:class "toggle"
-                :type "checkbox"
-                :checked completed?
-                :on-change #(on-toggle id)})
+      (d/input
+       {:class "toggle"
+        :type "checkbox"
+        :checked completed?
+        :on-change #(on-toggle id)})
       (d/label {:on-double-click #(dispatch [::start-editing])} title)
-      (d/button {:class "destroy"
-                 :on-click #(on-destroy id)})))))
+      (d/button
+       {:class "destroy"
+        :on-click #(on-destroy id)})))))

@@ -1,14 +1,14 @@
 (ns todo-mvc.components
-  (:require [helix.core :as hx]))
+  (:require [helix.core :as helix]))
 
 (defmacro title [& args]
-  `(hx/$ Title ~@args))
+  `(helix/$ Title ~@args))
 
 (defmacro app-footer [& args]
-  `(hx/$ AppFooter ~@args))
+  `(helix/$ AppFooter ~@args))
 
 (defmacro new-todo [& args]
-  `(hx/$ NewTodo ~@args))
+  `(helix/$ NewTodo ~@args))
 
 (defmacro todo-item [& args]
-  `(hx/$ TodoItem ~@args))
+  `(helix/$ TodoItem ~@args))
