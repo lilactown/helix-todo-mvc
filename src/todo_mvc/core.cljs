@@ -127,7 +127,8 @@
                         :on-click clear-completed} "Clear completed")))))
         (c/app-footer)))))
 
+(def root (rdom/createRoot (js/document.getElementById "app")))
+
 (defn ^:export start
   []
-  (let [root (rdom/createRoot (js/document.getElementById "app"))]
-    (.render root ($ App))))
+  (.render root ($ App)))
