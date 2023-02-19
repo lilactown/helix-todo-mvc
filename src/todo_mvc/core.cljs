@@ -7,7 +7,7 @@
    [todo-mvc.components :as c]
    [todo-mvc.lib :refer [defnc]]
    [todo-mvc.storage :as storage]
-   ["react-dom" :as rdom]
+   ["react-dom/client" :as rdom]
    ["react-router-dom" :as rr]))
 
 (defn todo [id title]
@@ -127,6 +127,8 @@
                         :on-click clear-completed} "Clear completed")))))
         (c/app-footer)))))
 
+(defonce root (rdom/createRoot (js/document.getElementById "app")))
+
 (defn ^:export start
   []
-  (rdom/render ($ App) (js/document.getElementById "app")))
+  (.render root ($ App)))
